@@ -1,0 +1,110 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+string get_better_large(const string& a, const string& b) {
+    if (a == "") return b;
+    if (b == "") return a;
+    if (a.length() != b.length()) {
+        return (a.length() > b.length()) ? a : b;
+    }
+    return (a > b) ? a : b;
+}
+
+
+string get_better_small(const string& a, const string& b) {
+    if (a == "") return b;
+    if (b == "") return a;
+    if (a.length() != b.length()) {
+        return (a.length() < b.length()) ? a : b;
+    }
+    return (a < b) ? a : b;
+}
+
+void solve() {
+    string s; 
+    cin >> s;
+
+    // dp_large[rem] and dp_small[rem] will store the best strings for remainder 'rem'
+    string dp_large[8], dp_small[8];
+    for (int i = 0; i < 8; i++) {
+        dp_large[i] = "";
+        dp_small[i] = "";
+    }
+
+    bool has_zero = false;
+
+    for (char c : s) {
+        int d = c - '0';
+        if (d == 0) has_zero = true;
+
+        string next_large[8], next_small[8];
+        for (int i = 0; i < 8; i++) {
+            next_large[i] = dp_large[i];
+            next_small[i] = dp_small[i];
+        }
+
+        // 1. Start a new subsequence 
+        if (d > 0) {
+            string d_str = to_string(d);
+            int rem = d % 8;
+            next_large[rem] = get_better_large(next_large[rem], d_str);
+            next_small[rem] = get_better_small(next_small[rem], d_str);
+        }
+
+        // 2. Extend existing subsequences
+        for (int r = 0; r < 8; r++) {
+            // For Largest
+            if (dp_large[r] != "") {
+                string new_str = dp_large[r] + c;
+                int new_rem = (r * 10 + d) % 8;
+                next_large[new_rem] = get_better_large(next_large[new_rem], new_str);
+            }
+            // For Smallest
+            if (dp_small[r] != "") {
+                string new_str = dp_small[r] + c;
+                int new_rem = (r * 10 + d) % 8;
+                next_small[new_rem] = get_better_small(next_small[new_rem], new_str);
+            }
+        }
+
+      
+        for (int i = 0; i < 8; i++) {
+            dp_large[i] = next_large[i];
+            dp_small[i] = next_small[i];
+        }
+    }
+
+
+    string ans_large = dp_large[0];
+    string ans_small = dp_small[0];
+
+    
+    if (has_zero) {
+        ans_large = get_better_large(ans_large, "0");
+        ans_small = get_better_small(ans_small, "0");
+    }
+
+    // Output Largest
+    if (ans_large != "") {
+        cout << "Largest : " << ans_large << "\n";
+    } else {
+        cout << "Largest: None\n";
+    }
+
+    // Output Smallest
+    if (ans_small != "") {
+        cout << "Smallest : " << ans_small << "\n";
+    } else {
+        cout << "Smallest: None\n";
+    }
+}
+
+int32_t main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int t=1;
+    //cin >> t;
+    solve();
+    return 0;
+}
