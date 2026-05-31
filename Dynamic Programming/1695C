@@ -1,0 +1,82 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+using ll = long long;
+#define INF (int)1e12+1
+#define f first
+#define s second
+#define all(x) (x).begin(), (x).end()
+
+#define rall(x) (x).rbegin(), (x).rend()
+using vll = vector<long long>;
+using vi = vector<int>;
+using vc = vector<char>;
+using vs = vector<string>;
+ll MOD = 1e9+7;
+constexpr int inf = 1e18;
+#define pb push_back
+#define pf push_front
+#define rep1(i,n) for(int i=1;i<=(n);i++)
+#define rep(i,n) for (int i=0;i<(n);i++)
+mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
+
+
+void solve(){
+
+        int n,m;
+        cin >> n >> m;
+        vector<vi>grid(n,vi(m));
+        rep(i,n){
+                rep(j,m){
+                        cin >> grid[i][j];
+                }
+        }
+
+        if ((n+m-1)%2!=0){
+                cout << "NO\n";
+                return;
+        }
+
+        vector<vi>mn(n,vi(m)),mx(n,vi(m));
+
+        rep(i,n){
+                rep(j,m){
+                        if (i==0 && j==0){
+                                mn[i][j] = mx[i][j] = grid[i][j];
+                        }
+                        else{
+                                int low = 1e9,high = -1e9;
+                                if (i>0){
+                                        low = min(low , mn[i-1][j]);
+                                        high = max(high,mx[i-1][j]);
+                                }
+                                if (j>0){
+                                        low = min(low , mn[i][j-1]);
+                                        high = max(high,mx[i][j-1]);
+                                }
+
+
+                                mn[i][j] = grid[i][j]+low;
+                                mx[i][j] = grid[i][j]+high;
+                        }
+                }
+        }
+
+        if (mn[n-1][m-1] <=0 && mx[n-1][m-1]>=0)cout <<"YES\n";
+        else cout << "NO\n";
+}
+int32_t main() {
+    ios_base::sync_with_stdio(0);
+
+    cin.tie(0);
+    int t =1;
+
+
+    cin >>t;
+
+    while(t--){
+    solve();
+    }
+    return 0;
+}
