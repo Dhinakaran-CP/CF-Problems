@@ -34,7 +34,7 @@ This means that to use $q$ L-shapes, we need at least $q$ horizontal slots and $
 
 The remaining $p$ straight segments must fill the remaining slots: $p = (H - q) + (V - q)$.
 
-For this to be valid, the "imbalance" between $H$ and $V$ cannot exceed our $p$ segments.
+For this to be valid, the difference between $H$ and $V$ cannot exceed our $p$ segments.
 
 $$|H - V| \leq p$$
 
